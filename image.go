@@ -88,7 +88,23 @@ func (m *Image) At(x, y int) color.Color {
 // ReadImage reads an image from the connection.
 func (c *Conn) ReadImage() (*Image, error) {
 	defer c.Cancel()
+	return c.ReadImageFromSequence()
+}
 
+// ReadImageFromSequence reads an image from a stream in the connection (e.g. an
+// automated document feeder).
+// defer c.Cancel()
+// for {
+//   img, err := c.ReadImageFromSequence()
+//   if err == sane.ErrEmpty {
+//     break
+//   }
+//   if err != nil {
+//     return err
+//   }
+//   ...
+// }
+func (c *Conn) ReadImageFromSequence() (*Image, error) {
 	m := Image{}
 	for {
 		f, err := c.ReadFrame()
